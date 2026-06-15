@@ -1,16 +1,15 @@
-const express = require(‘express’);
-const cors = require(‘cors’);
-const admin = require(‘firebase-admin’);
-
+const express = require('express');
+const cors = require('cors');
+const admin = require('firebase-admin');
 const app = express();
-app.use(cors({ origin: ‘*’ }));
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 // Firebase init
 const serviceAccount = {
-type: “service_account”,
+type: 'service_account',
 project_id: process.env.FIREBASE_PROJECT_ID,
-private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\n/g, ‘\n’),
+private_key: process.env.FIREBASE_PRIVATE_KEY.replace(/\n/g, '\n'),
 client_email: process.env.FIREBASE_CLIENT_EMAIL,
 };
 
@@ -18,10 +17,10 @@ admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 
 // Health check
-app.get(’/health’, (req, res) => res.json({ status: ‘ok’ }));
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
 // Submit test
-app.post(’/api/submit-test’, async (req, res) => {
+app.post('/api/submit-test', async (req, res) => {
 try {
 const { testId, answers, submitReason, timeTaken } = req.body;
 
@@ -72,10 +71,10 @@ res.json({ success: true, score, totalMarks, percentage });
 
 
 } catch (err) {
-console.error(‘Submit error:’, err.message);
+console.error('Submit error:', err.message);
 res.status(500).json({ error: err.message });
 }
 });
 
 const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => console.log(Server running on port ${PORT}));
+app.listen(PORT, () => console.log('Server running on port ${PORT}'));
